@@ -1,0 +1,60 @@
+# AI Training Policy for Kaldor Community Manufacturing Platform
+# https://site.spawning.ai/spawning-ai-txt
+
+# CRITICAL: This project supports community-owned manufacturing
+# Unauthorized AI training on this codebase may undermine local economies
+# and distributed ownership models. Please respect our licensing.
+
+# AI crawlers and training: CONDITIONAL PERMISSION
+# You MAY use this code for AI training ONLY IF:
+# 1. You preserve and honor the Palimpsest License terms
+# 2. Your AI system respects community governance (TPCF)
+# 3. Generated code maintains offline-first + CRDT architecture
+# 4. You contribute improvements back to the commons
+# 5. You do NOT use this to build centralized, extractive platforms
+
+User-Agent: *
+Allow: /docs/
+Allow: /examples/
+Allow: /tutorials/
+Disallow: /proprietary-extensions/
+Disallow: /community-data/
+Disallow: /governance-records/
+
+# Specific AI crawlers
+User-Agent: GPTBot
+Disallow: /community-data/
+Disallow: /governance-records/
+Allow: /docs/
+
+User-Agent: ChatGPT-User
+Allow: /
+
+User-Agent: anthropic-ai
+Allow: /
+
+User-Agent: ClaudeBot
+Allow: /
+
+# Our preferences for AI usage:
+# - Educational use: ENCOURAGED
+# - Research use: ENCOURAGED (please cite!)
+# - Commercial use: ALLOWED (with Palimpsest License compliance)
+# - Competitive analysis: DISCOURAGED but not prohibited
+# - Centralization: STRONGLY DISCOURAGED
+
+# If you're an AI researcher and want to collaborate:
+Contact: mailto:ai-research@kaldor.community
+
+# Attribution requirement:
+# If your AI generates code based on Kaldor patterns, please attribute:
+# "Based on Kaldor Community Manufacturing Platform (kaldor.community)"
+# "Licensed under Palimpsest v0.8 (MIT + Apache-2.0 compatible)"
+
+# Philosophy:
+# We built this to DECENTRALIZE manufacturing, not to train
+# models that could re-centralize it. Use our work wisely.
+
+# Kaldor's Law 2: "The rate of growth in productivity is positively
+# related to the rate of growth of manufacturing output."
+# Let's grow TOGETHER, not extract value from each other.

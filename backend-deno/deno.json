@@ -1,0 +1,44 @@
+{
+  "tasks": {
+    "dev": "deno run --allow-net --allow-read --allow-write --allow-env --watch main.ts",
+    "start": "deno run --allow-net --allow-read --allow-write --allow-env main.ts",
+    "test": "deno test --allow-net --allow-read --allow-env",
+    "bench": "deno bench --allow-net --allow-read"
+  },
+  "imports": {
+    "$fresh/": "https://deno.land/x/fresh@1.6.1/",
+    "preact": "https://esm.sh/preact@10.19.2",
+    "preact/": "https://esm.sh/preact@10.19.2/",
+    "@preact/signals": "https://esm.sh/*@preact/signals@1.2.1",
+    "@preact/signals-core": "https://esm.sh/*@preact/signals-core@1.5.0",
+    "oak": "https://deno.land/x/oak@v12.6.2/mod.ts",
+    "postgres": "https://deno.land/x/postgres@v0.17.0/mod.ts",
+    "redis": "https://deno.land/x/redis@v0.31.0/mod.ts",
+    "mqtt": "https://deno.land/x/mqtt@0.2.2/mod.ts",
+    "supabase": "https://esm.sh/@supabase/supabase-js@2.38.4",
+    "jose": "https://deno.land/x/jose@v5.1.0/index.ts",
+    "bcrypt": "https://deno.land/x/bcrypt@v0.4.1/mod.ts",
+    "zod": "https://deno.land/x/zod@v3.22.4/mod.ts",
+    "std/": "https://deno.land/std@0.208.0/"
+  },
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "preact",
+    "lib": ["deno.window", "dom", "dom.iterable"],
+    "strict": true
+  },
+  "lint": {
+    "rules": {
+      "tags": ["recommended"],
+      "include": ["ban-untagged-todo"]
+    }
+  },
+  "fmt": {
+    "useTabs": false,
+    "lineWidth": 100,
+    "indentWidth": 2,
+    "semiColons": false,
+    "singleQuote": true,
+    "proseWrap": "preserve"
+  }
+}
