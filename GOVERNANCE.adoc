@@ -1,0 +1,468 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
+// SPDX-FileCopyrightText: 2025 Kaldor Community Manufacturing Platform Contributors
+= Kaldor IIoT Governance Model
+:toc: left
+:toclevels: 3
+:icons: font
+
+This document defines the decision-making processes, maintainer succession, financial transparency, and conflict resolution for the Kaldor IIoT project.
+
+== Principles
+
+1. **Decentralized Authority**: No single individual or organization controls the project
+2. **Consensus Over Voting**: Seek agreement first, vote only when necessary
+3. **Reversibility**: Decisions can be revisited with new evidence
+4. **Transparency**: All governance discussions are public (except security/HR issues)
+5. **Offline-First**: Governance works without internet connectivity (CURP consensus)
+
+== Decision-Making Framework
+
+=== CURP Consensus Protocol
+
+Kaldor uses **CURP** (Consistent Unordered Replication Protocol) for governance decisions, enabling offline-capable, distributed consensus.
+
+==== How CURP Works
+1. **Proposal**: Maintainer creates proposal with unique ID
+2. **Replication**: Proposal synced to all maintainers (even offline nodes)
+3. **Voting**: Maintainers vote using quadratic voice credits (offline-capable)
+4. **Convergence**: CRDTs resolve conflicts when nodes reconnect
+5. **Execution**: Approved proposals execute automatically
+
+==== CURP Guarantees
+* **Eventual Consistency**: All nodes converge to same decision
+* **Partition Tolerance**: Offline nodes catch up when reconnected
+* **No Blocking**: No single node failure prevents progress
+* **Deterministic**: Same inputs always produce same outcome
+
+=== Quadratic Voting
+
+To prevent tyranny of majority and plutocracy, Kaldor uses **quadratic voting** with voice credits.
+
+==== Voice Credit Allocation
+[cols="2,1,3"]
+|===
+|Action |Credits |Rationale
+
+|New member
+|10
+|Starting balance for participation
+
+|1 month active contribution
+|+5
+|Reward sustained engagement
+
+|1 merged PR (Perimeter 2/1)
+|+2
+|Technical contribution value
+
+|Security disclosure
+|+10
+|Critical contribution to project safety
+
+|Mentoring new contributor
+|+3
+|Community building
+
+|**Maximum accumulation**
+|**100**
+|**Prevents plutocracy**
+|===
+
+==== Voting Cost Formula
+
+To cast `n` votes on a single proposal, you spend `n²` voice credits.
+
+.Example
+* 1 vote = 1² = 1 credit
+* 2 votes = 2² = 4 credits
+* 3 votes = 3² = 9 credits
+* 5 votes = 5² = 25 credits
+* 10 votes = 10² = 100 credits (maximum)
+
+**Effect**: Strong preferences cost exponentially more, encouraging broad consensus.
+
+==== Approval Thresholds
+[cols="2,1,3"]
+|===
+|Decision Type |Threshold |Veto Power
+
+|**Breaking Changes**
+|66% approval
+|No single veto >25% of total votes
+
+|**New Perimeter 1 Maintainer**
+|75% approval
+|Sponsor from different org required
+
+|**Architecture Decisions**
+|66% approval
+|ADR documentation required
+
+|**Security Patches**
+|Simple majority (51%)
+|Expedited process, post-hoc review
+
+|**Funding Allocation**
+|75% approval
+|Financial transparency required
+
+|**Code of Conduct Enforcement**
+|66% approval
+|Independent ombudsperson consulted
+
+|**Project Fork/Archive**
+|90% approval
+|30-day discussion period
+|===
+
+==== Vote Delegation
+Maintainers can delegate voice credits to trusted proxies:
+
+[source,bash]
+----
+# Delegate 20 credits to proxy
+deno run scripts/governance/delegate.ts \
+  --credits 20 \
+  --proxy alice@example.com \
+  --duration 30days
+----
+
+**Constraints**:
+* Cannot delegate >50% of credits
+* Delegation expires after specified duration
+* Can revoke delegation anytime
+
+== Roles & Responsibilities
+
+=== Perimeter 1: Core Maintainers
+
+**Current Roster**: See link:MAINTAINERS.md[MAINTAINERS.md]
+
+==== Responsibilities
+* Review Perimeter 2/3 contributions (24-48 hour SLA)
+* Security incident response (24-hour acknowledgement)
+* Release management (semantic versioning)
+* Governance participation (quadratic voting)
+* Mentor Perimeter 2 contributors
+* Financial stewardship (if project funded)
+
+==== Time Commitment
+* **Minimum**: 5 hours/week (review, governance, community)
+* **Expected**: 10-15 hours/week for active maintainers
+* **Sabbaticals**: 4-week notice, temporary delegation
+
+==== Becoming a P1 Maintainer
+1. **Nomination**: Existing P1 maintainer sponsors candidate
+2. **Review**: Public review period (2 weeks)
+3. **Voting**: 75% approval via quadratic voting
+4. **Onboarding**: 2-week shadowing period with sponsor
+5. **Responsibilities**: Sign link:MAINTAINERS.md[MAINTAINERS.md] agreement
+
+==== Stepping Down
+Maintainers can step down anytime with 4-week notice:
+
+1. Announce intention in governance forum
+2. Transfer active responsibilities to other P1s
+3. Transition to Perimeter 2 (or leave entirely)
+4. Update link:MAINTAINERS.md[MAINTAINERS.md]
+
+**Emeritus Status**: Long-serving maintainers (>2 years) can request advisory role with voting rights but no review obligations.
+
+==== Removal Process
+If maintainer is unresponsive (>30 days) or violates link:CODE_OF_CONDUCT.md[Code of Conduct]:
+
+1. Private outreach (ombudsperson)
+2. Public discussion (if unresolved)
+3. Voting: 66% approval to remove
+4. Update link:MAINTAINERS.md[MAINTAINERS.md]
+
+=== Perimeter 2: Professional Contributors
+
+==== Responsibilities
+* Implement features, fix bugs
+* Maintain documentation
+* Review Perimeter 3 contributions (optional)
+* Participate in technical discussions
+
+==== Becoming P2
+* 5+ merged PRs in Perimeter 3
+* Demonstrated domain expertise
+* Nominated by P1 maintainer
+* Consensus approval from P1s
+
+=== Perimeter 3: Community Contributors
+
+**Open to Everyone**
+
+* Self-service sandbox (`sandbox/` directory)
+* Learning by doing (no rejection anxiety)
+* Pathway to Perimeter 2
+
+See link:CONTRIBUTING.adoc[CONTRIBUTING.adoc] for TPCF details.
+
+== Organizational Structure
+
+=== Working Groups
+
+Specialized teams for focus areas:
+
+[cols="2,2,1"]
+|===
+|Working Group |Responsibilities |Lead
+
+|**Backend**
+|Deno server, WASM integration, APIs
+|TBD
+
+|**Frontend**
+|ReScript UI, dashboard, governance interface
+|TBD
+
+|**Firmware**
+|ESP32-C6, Matter protocol, RISC-V
+|TBD
+
+|**Data & CRDTs**
+|TimescaleDB, Automerge, offline-first
+|TBD
+
+|**Community**
+|Documentation, onboarding, support
+|TBD
+
+|**Security**
+|Vulnerability response, audits, threat modeling
+|TBD
+
+|**Governance**
+|Policy, voting, conflict resolution
+|TBD
+|===
+
+**Formation**: Any P1 maintainer can propose new working group (simple majority vote)
+
+**Meetings**: Asynchronous-first (written proposals), synchronous optional
+
+=== Advisory Board (Future)
+
+When project has funding or significant adoption:
+
+* Domain experts (manufacturing, IoT, economics)
+* Community representatives (user organizations)
+* Legal/licensing advisors
+* No voting power, advisory only
+
+== Financial Governance
+
+=== Current Status
+Project is unfunded (volunteer-driven).
+
+=== If Funded (Future)
+1. **Transparency**: All financial records public (OpenCollective preferred)
+2. **Allocation**: 75% approval via quadratic voting
+3. **Priorities**:
+   - Contributor stipends (>50% of budget)
+   - Infrastructure costs (hosting, CI/CD, hardware)
+   - Security audits
+   - Community events
+4. **Prohibited**: No individual salaries >2x median contributor stipend
+
+=== Funding Sources
+See link:FUNDING.yml[FUNDING.yml] for active channels:
+
+* Individual donations (Liberapay, Open Collective)
+* Grants (foundations, government programs)
+* Cooperative membership fees (if governance transitions to cooperative)
+* Service contracts (support, consulting)
+
+**Prohibited**: Venture capital, corporate ownership stakes
+
+== Conflict Resolution
+
+=== Process
+
+==== Step 1: Direct Discussion
+Parties attempt private resolution (7 days).
+
+==== Step 2: Mediation
+Ombudsperson facilitates discussion (14 days).
+
+**Ombudsperson**: Rotating role among P1 maintainers (6-month terms).
+
+==== Step 3: Governance Vote
+If unresolved, governance vote (66% approval).
+
+==== Step 4: External Arbitration
+For legal/contractual disputes, binding arbitration (rare).
+
+=== Code of Conduct Violations
+
+See link:CODE_OF_CONDUCT.md#enforcement[CODE_OF_CONDUCT.md] for enforcement procedures.
+
+**Separation**: CoC violations handled by separate committee (not regular governance).
+
+== Decision Records
+
+=== Architecture Decision Records (ADRs)
+
+All architectural changes require ADR in `docs/architecture/adr/`.
+
+.ADR Template
+----
+# ADR-NNN: Title
+
+**Status**: Proposed | Accepted | Deprecated | Superseded
+
+**Context**: What is the issue we're addressing?
+
+**Decision**: What are we doing about it?
+
+**Consequences**: What are the trade-offs?
+
+**Alternatives Considered**: What else did we evaluate?
+----
+
+=== Governance Decision Log
+
+All governance votes recorded in `docs/governance/decisions/`.
+
+.Decision Log Format
+[source,yaml]
+----
+id: GD-2025-001
+date: 2025-11-28
+type: Architecture Decision
+proposal: "Adopt CURP consensus for governance"
+votes:
+  - maintainer: alice@example.com
+    credits_spent: 9  # 3 votes
+    approve: true
+  - maintainer: bob@example.com
+    credits_spent: 4  # 2 votes
+    approve: true
+threshold: 66%
+result: Approved (80% approval)
+----
+
+== Succession Planning
+
+=== Maintainer Succession
+
+**Target**: Minimum 5 active P1 maintainers from ≥3 organizations
+
+**Recruitment**: Annual call for nominations
+
+**Diversity**: Strive for geographic, organizational, domain diversity
+
+=== Project Stewardship
+
+If all P1 maintainers become inactive:
+
+1. **Automatic Escalation**: P2 contributors inherit P1 responsibilities (temporary)
+2. **Emergency Election**: Community votes on new P1 maintainers (simple majority)
+3. **Archival**: If no active contributors for 12 months, project archived with clear notice
+
+=== Fork Rights
+
+Any contributor can fork project under link:LICENSE.txt[LICENSE.txt] terms:
+
+* Must preserve attribution (SPDX headers)
+* Cannot use "Kaldor IIoT" trademark without permission
+* Community may recognize fork as canonical (90% vote)
+
+== Amendment Process
+
+This governance document can be amended:
+
+1. **Proposal**: Any P1 maintainer drafts amendment
+2. **Discussion**: 30-day public comment period
+3. **Voting**: 75% approval via quadratic voting
+4. **Effective Date**: 14 days after approval (allows for objections)
+
+**Version Control**: All governance changes tracked in Git with rationale in commit messages.
+
+== Emergency Procedures
+
+=== Security Incidents
+* **Authority**: Security working group + 2 P1 maintainers
+* **Timeline**: Immediate action, post-hoc governance review within 7 days
+* **Process**: See link:SECURITY.md[SECURITY.md]
+
+=== Code of Conduct Emergencies
+* **Authority**: Ombudsperson + CoC committee
+* **Timeline**: 24-hour initial response, 7-day resolution
+* **Process**: See link:CODE_OF_CONDUCT.md#enforcement[CODE_OF_CONDUCT.md]
+
+=== Infrastructure Failures
+* **Authority**: Infrastructure working group
+* **Timeline**: Immediate triage, 48-hour postmortem
+* **Transparency**: Public incident reports (except security-sensitive details)
+
+== Governance Tooling
+
+=== Technical Implementation
+
+[source,typescript]
+----
+// scripts/governance/propose.ts
+import { Proposal } from "../lib/governance.ts";
+
+const proposal = new Proposal({
+  title: "Adopt new dependency audit policy",
+  description: "Require SBOM for all new dependencies",
+  type: "policy",
+  threshold: 0.66,  // 66% approval
+});
+
+await proposal.submit();
+// Syncs via CURP to all maintainers (offline-capable)
+----
+
+[source,typescript]
+----
+// scripts/governance/vote.ts
+import { vote } from "../lib/governance.ts";
+
+await vote({
+  proposalId: "GD-2025-001",
+  credits: 4,  // 2 votes (quadratic: 2² = 4)
+  approve: true,
+});
+----
+
+=== Offline Voting
+
+Maintainers can vote offline using CURP:
+
+[source,bash]
+----
+# Sync proposals while online
+deno run scripts/governance/sync.ts
+
+# Go offline, review proposals locally
+deno run scripts/governance/list.ts
+
+# Vote offline (stored in local CRDT)
+deno run scripts/governance/vote.ts \
+  --proposal GD-2025-001 \
+  --credits 4 \
+  --approve
+
+# Reconnect, sync votes (automatic conflict resolution)
+deno run scripts/governance/sync.ts
+----
+
+== Questions & Feedback
+
+* **Governance Questions**: Open issue with `governance` label
+* **Propose Amendment**: Start discussion in governance forum
+* **Emergency Contact**: governance@kaldor.community
+
+---
+
+**Document Version**: 1.0.0 +
+**Last Updated**: 2025-11-28 +
+**Next Review**: 2026-05-28 (6 months) +
+**License**: MIT OR Apache-2.0
+
+_"Governance is not about control—it's about enabling collective action."_

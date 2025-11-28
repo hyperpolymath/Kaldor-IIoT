@@ -1,0 +1,458 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
+// SPDX-FileCopyrightText: 2025 Kaldor Community Manufacturing Platform Contributors
+= Contributing to Kaldor IIoT
+:toc: left
+:toclevels: 3
+:icons: font
+
+Thank you for your interest in contributing to Kaldor IIoT! This document explains our **Tri-Perimeter Contribution Framework (TPCF)**, development practices, and community standards.
+
+== Tri-Perimeter Contribution Framework (TPCF)
+
+Kaldor uses a graduated trust model with three perimeters, balancing **emotional safety** (low-stakes contribution, reversibility) with **quality assurance**.
+
+=== Perimeter 3: Community Sandbox (Open Contribution)
+
+**Who**: Anyone with a GitHub account +
+**Access**: Fork → Pull Request to `sandbox/` directory +
+**Approval**: Self-merge after CI passes (no human review required) +
+**Scope**: Experiments, learning, non-critical features
+
+.Perimeter 3 Directories
+----
+sandbox/                  # Community experiments
+docs/community/           # User-contributed tutorials
+examples/                 # Sample applications
+scripts/experimental/     # Prototype automation
+----
+
+.Example P3 Contribution
+[source,bash]
+----
+# Fork repo, create branch
+git checkout -b sandbox/my-experiment
+
+# Add your work to sandbox directory
+mkdir -p sandbox/my-feature
+echo "# My Experiment" > sandbox/my-feature/README.md
+
+# Push and create PR
+git add sandbox/my-feature
+git commit -m "feat(sandbox): add my experimental feature"
+git push origin sandbox/my-experiment
+
+# CI runs automatically, auto-merges if tests pass
+----
+
+**Emotional Safety**: No rejection anxiety—if CI passes, it merges. Learn by doing.
+
+=== Perimeter 2: Professional Contributors (Trusted Experts)
+
+**Who**: Domain experts, regular contributors with proven track record +
+**Access**: Direct commits to `src/`, `docs/`, `firmware/` with 2-approval rule +
+**Approval**: 2 maintainers from different organizations must approve +
+**Scope**: Features, bug fixes, documentation improvements
+
+.Perimeter 2 Directories
+----
+src/                      # Source code
+docs/                     # Official documentation
+firmware-esp32/           # ESP32 firmware
+frontend-rescript/        # ReScript frontend
+backend-deno/             # Deno backend
+tests/                    # Test suites
+----
+
+.P2 Approval Requirements
+* ✅ 2 approvals from P1 maintainers (different orgs preferred)
+* ✅ All CI checks pass (tests, linters, security scans)
+* ✅ Documentation updated (if applicable)
+* ✅ Semantic commit message (Conventional Commits)
+
+.Becoming a P2 Contributor
+* 5+ merged PRs in Perimeter 3
+* Demonstrated domain expertise
+* Nominated by existing P1 maintainer
+* Consensus approval from P1 maintainers (see link:GOVERNANCE.adoc[GOVERNANCE.adoc])
+
+=== Perimeter 1: Core Maintainers (Consensus Governance)
+
+**Who**: Elected maintainers with full commit access +
+**Access**: Direct commits to all directories, including critical infrastructure +
+**Approval**: Consensus voting for breaking changes (66% approval, no single veto >25%) +
+**Scope**: Architecture decisions, security patches, release management
+
+See link:MAINTAINERS.md[MAINTAINERS.md] for current P1 roster.
+
+.P1 Responsibilities
+* Review P2/P3 contributions
+* Security incident response (24-hour SLA)
+* Release management (semantic versioning)
+* Governance decisions (quadratic voting)
+* Mentor P2 contributors
+
+.P1 Voting Procedures
+* **Breaking Changes**: 66% approval required via CURP consensus
+* **New P1 Maintainer**: 75% approval + sponsor from different org
+* **Architecture Decisions**: Documented in ADRs (Architecture Decision Records)
+* **Voice Credits**: See link:GOVERNANCE.adoc#quadratic-voting[GOVERNANCE.adoc]
+
+== Development Workflow
+
+=== 1. Setup Development Environment
+
+[source,bash]
+----
+# Install Nix
+curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
+
+# Clone repository
+git clone https://github.com/Hyperpolymath/Kaldor-IIoT.git
+cd Kaldor-IIoT
+
+# Enter Nix development shell (installs all dependencies)
+nix develop
+
+# Verify installation
+just doctor  # Runs health checks
+----
+
+=== 2. Create Feature Branch
+
+[source,bash]
+----
+# Perimeter 3 (sandbox)
+git checkout -b sandbox/your-feature-name
+
+# Perimeter 2 (source code)
+git checkout -b feat/your-feature-name
+git checkout -b fix/bug-description
+git checkout -b docs/documentation-update
+----
+
+=== 3. Make Changes
+
+==== Code Style
+* **Deno**: Follow Deno style guide (`deno fmt`, `deno lint`)
+* **ReScript**: ReScript formatter (`npm run format`)
+* **Rust**: Rustfmt + Clippy (`cargo fmt`, `cargo clippy`)
+* **Commit Messages**: Conventional Commits (see below)
+
+==== Testing Requirements
+[source,bash]
+----
+# Run all tests
+just test
+
+# Run specific suite
+just test-backend   # Deno tests
+just test-frontend  # ReScript tests
+just test-wasm      # Rust WASM tests
+just test-firmware  # ESP32 firmware tests (requires hardware or emulator)
+----
+
+**Coverage Requirements**:
+* P3 (sandbox): No minimum
+* P2 (source): ≥80% line coverage
+* P1 (critical): ≥90% line coverage + property-based tests
+
+==== Documentation
+* Update README.adoc if changing installation/usage
+* Add docstrings to public APIs
+* Create ADR for architectural changes (`docs/architecture/adr/`)
+* Update CHANGELOG.md (automatic via CI for P2/P1)
+
+=== 4. Commit Changes
+
+.Conventional Commits Format
+----
+<type>(<scope>): <description>
+
+[optional body]
+
+[optional footer]
+----
+
+.Types
+* `feat`: New feature
+* `fix`: Bug fix
+* `docs`: Documentation only
+* `refactor`: Code restructuring (no behavior change)
+* `test`: Adding/updating tests
+* `chore`: Build process, dependencies, tooling
+* `security`: Security fixes (coordinate with link:SECURITY.md[SECURITY.md])
+
+.Examples
+[source,text]
+----
+feat(wasm): add 3D weave pattern generation
+
+Implements twill, satin, and plain weave patterns using Rust WASM.
+Performance: 10x faster than JavaScript implementation.
+
+Closes #42
+
+---
+
+fix(mqtt): prevent message loss during reconnection
+
+Queues messages locally using Deno KV when MQTT broker unavailable.
+
+Fixes #128
+
+---
+
+docs(governance): clarify quadratic voting formula
+
+Added examples and edge cases to GOVERNANCE.adoc.
+----
+
+.SPDX Headers (Required for P2/P1)
+Every source file MUST have SPDX headers:
+
+[source,typescript]
+----
+// SPDX-License-Identifier: MIT OR Apache-2.0
+// SPDX-FileCopyrightText: 2025 Your Name <your.email@example.com>
+
+export function myFunction() {
+  // ...
+}
+----
+
+Validate with: `just audit-licence`
+
+=== 5. Push and Create Pull Request
+
+[source,bash]
+----
+# Push to your fork
+git push origin your-branch-name
+
+# Create PR via GitHub UI or CLI
+gh pr create --title "feat(scope): description" \
+  --body "Closes #issue-number"
+----
+
+.PR Checklist
+- [ ] Tests pass locally (`just test`)
+- [ ] Documentation updated
+- [ ] CHANGELOG.md entry added (if P2/P1)
+- [ ] SPDX headers on new files
+- [ ] Conventional Commit format
+- [ ] No merge conflicts with `main`
+
+=== 6. Code Review & Merge
+
+==== Perimeter 3
+* CI runs automatically
+* Auto-merges if tests pass
+* No human review required (emotional safety!)
+
+==== Perimeter 2
+* 2 P1 maintainers review
+* Address feedback via commits or discussion
+* Squash or rebase before merge (maintainer preference)
+* Auto-added to CHANGELOG.md
+
+==== Perimeter 1
+* Consensus voting for breaking changes
+* Security review for critical paths
+* Architecture Decision Record (ADR) if needed
+
+== Emotional Safety & Reversibility
+
+Kaldor is committed to **low-stakes contribution** and **anxiety reduction**.
+
+=== Principles
+1. **No Permanent Mistakes**: All changes are reversible via Git
+2. **Sandbox for Learning**: Perimeter 3 has no rejection risk
+3. **Clear Escalation Path**: P3 → P2 → P1 with transparent criteria
+4. **Blameless Postmortems**: Incidents are learning opportunities, not blame sessions
+5. **Right to Disconnect**: No expectation of 24/7 availability
+
+=== Conflict Resolution
+1. **Technical Disagreements**: Documented in ADRs, decided by consensus vote
+2. **Code of Conduct Violations**: See link:CODE_OF_CONDUCT.md#enforcement[CODE_OF_CONDUCT.md]
+3. **Governance Disputes**: See link:GOVERNANCE.adoc#conflict-resolution[GOVERNANCE.adoc]
+
+See link:REVERSIBILITY.md[REVERSIBILITY.md] for undo procedures.
+
+== Testing Standards
+
+=== Unit Tests
+[source,typescript]
+----
+// backend-deno/tests/pattern_test.ts
+import { assertEquals } from "https://deno.land/std@0.208.0/assert/mod.ts";
+import { generatePattern } from "../src/pattern.ts";
+
+Deno.test("generatePattern: creates valid twill pattern", () => {
+  const pattern = generatePattern({ type: "twill", warp: 8, weft: 8 });
+  assertEquals(pattern.length, 8);
+  assertEquals(pattern[0].length, 8);
+});
+----
+
+=== Integration Tests
+[source,bash]
+----
+# Start test environment
+just test-env-up
+
+# Run integration tests
+just test-integration
+
+# Cleanup
+just test-env-down
+----
+
+=== Property-Based Tests (P1 Critical Code)
+[source,rust]
+----
+// wasm/pattern_gen/tests/properties.rs
+use proptest::prelude::*;
+
+proptest! {
+    #[test]
+    fn pattern_never_exceeds_bounds(warp in 1..256u32, weft in 1..256u32) {
+        let pattern = generate_pattern(warp, weft, PatternType::Twill);
+        assert!(pattern.len() <= weft as usize);
+        assert!(pattern[0].len() <= warp as usize);
+    }
+}
+----
+
+== Security Contributions
+
+=== Vulnerability Reporting
+**DO NOT** open public issues for security vulnerabilities.
+
+See link:SECURITY.md[SECURITY.md] for responsible disclosure:
+
+* Email: security@kaldor.community
+* PGP Key: link:.well-known/security.txt[.well-known/security.txt]
+* Coordinated Disclosure: 90 days
+
+=== Security Fixes
+* Always create private security advisory first
+* Coordinate patch release with P1 maintainers
+* Credit reporter in CHANGELOG.md (with permission)
+
+== Documentation Contributions
+
+=== Formats
+* **Technical Specs**: AsciiDoc (`.adoc`)
+* **Tutorials**: Markdown (`.md`)
+* **API Docs**: Inline docstrings (Deno doc, RustDoc, ReScriptDoc)
+
+=== Link Validation
+[source,bash]
+----
+# Check all links (internal and external)
+just check-links
+
+# Uses lychee for 404 detection
+----
+
+=== Accessibility
+* Alt text on all images
+* Semantic headings (h1 → h2 → h3, no skipping)
+* Code examples with language syntax highlighting
+
+== Dependency Management
+
+=== Adding Dependencies
+
+.Deno (backend-deno/deno.json)
+[source,bash]
+----
+# Add to imports map (pinned versions only)
+{
+  "imports": {
+    "new-lib": "https://deno.land/x/new-lib@v1.2.3/mod.ts"  // ✅ Pinned
+  }
+}
+----
+
+.Rust (Cargo.toml)
+[source,toml]
+----
+[dependencies]
+serde = "1.0.193"  # ✅ Pinned (no ~, ^, *)
+----
+
+.ReScript (package.json)
+[source,json]
+----
+{
+  "dependencies": {
+    "rescript": "11.0.1"  // ✅ Exact version
+  }
+}
+----
+
+=== Security Audits
+[source,bash]
+----
+# Audit all dependencies
+just audit
+
+# Check for CVEs
+just audit-security
+
+# License compliance
+just audit-licence
+----
+
+== Licensing
+
+=== Contributor License Agreement
+By contributing, you agree that your contributions will be licensed under:
+
+* **Code**: MIT OR Apache-2.0 (Palimpsest v0.8)
+* **Documentation**: CC-BY-SA-4.0
+* **Hardware Designs**: CERN-OHL-S-2.0
+
+See link:LICENSE.txt[LICENSE.txt] for full text.
+
+=== Attribution
+* Add yourself to `.well-known/humans.txt`
+* SPDX headers include your copyright: `SPDX-FileCopyrightText: 2025 Your Name <email>`
+
+== Communication Channels
+
+* **GitHub Issues**: Bug reports, feature requests
+* **GitHub Discussions**: Questions, ideas, community support
+* **Security**: security@kaldor.community (private)
+* **Governance**: Quadratic voting on proposals (see link:GOVERNANCE.adoc[GOVERNANCE.adoc])
+
+== Recognition & Credits
+
+=== Acknowledgement
+* All contributors listed in link:.well-known/humans.txt[.well-known/humans.txt]
+* Significant contributions highlighted in release notes
+* Annual community report recognizing contributors
+
+=== Voice Credits (Governance Participation)
+* New member: 10 credits
+* 1 month active contribution: +5 credits
+* 1 merged PR (P2/P1): +2 credits
+* Maximum accumulation: 100 credits (prevents plutocracy)
+
+See link:GOVERNANCE.adoc#quadratic-voting[GOVERNANCE.adoc] for voting mechanics.
+
+== Questions?
+
+* **General**: Open a GitHub Discussion
+* **Security**: security@kaldor.community
+* **Governance**: See link:GOVERNANCE.adoc[GOVERNANCE.adoc]
+* **Code of Conduct**: See link:CODE_OF_CONDUCT.md[CODE_OF_CONDUCT.md]
+
+---
+
+_Thank you for contributing to decentralized, community-owned manufacturing!_
+
+**Last Updated**: 2025-11-28 +
+**TPCF Version**: 1.0 +
+**License**: MIT OR Apache-2.0

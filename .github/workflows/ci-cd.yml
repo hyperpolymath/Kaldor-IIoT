@@ -1,0 +1,157 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  # Backend API Tests
+  backend-test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: timescale/timescaledb:latest-pg15
+        env:
+          POSTGRES_DB: kaldor_iiot_test
+          POSTGRES_USER: kaldor
+          POSTGRES_PASSWORD: test_password
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+      redis:
+        image: redis:7-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: backend/api/package-lock.json
+
+      - name: Install dependencies
+        working-directory: backend/api
+        run: npm ci
+
+      - name: Run linter
+        working-directory: backend/api
+        run: npm run lint
+
+      - name: Run tests
+        working-directory: backend/api
+        run: npm test
+        env:
+          DB_HOST: localhost
+          DB_PORT: 5432
+          DB_NAME: kaldor_iiot_test
+          DB_USER: kaldor
+          DB_PASSWORD: test_password
+          REDIS_HOST: localhost
+          REDIS_PORT: 6379
+          JWT_SECRET: test_secret_key_minimum_32_characters
+
+  # Frontend Tests
+  frontend-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Run linter
+        working-directory: frontend
+        run: npm run lint
+
+      - name: Build
+        working-directory: frontend
+        run: npm run build
+
+  # Python Analytics Tests
+  analytics-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        working-directory: backend/analytics
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest pytest-cov
+
+      - name: Run tests
+        working-directory: backend/analytics
+        run: pytest --cov=app
+
+  # Build and Push Docker Images
+  build-images:
+    needs: [backend-test, frontend-test, analytics-test]
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build API image
+        working-directory: backend/api
+        run: docker build -t kaldor-iiot-api:latest .
+
+      - name: Build Frontend image
+        working-directory: frontend
+        run: docker build -t kaldor-iiot-frontend:latest .
+
+      - name: Build Analytics image
+        working-directory: backend/analytics
+        run: docker build -t kaldor-iiot-analytics:latest .
+
+  # Deploy to IONOS
+  deploy:
+    needs: build-images
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Deploy to IONOS
+        uses: ionos-deploy-now/deploy-to-ionos-action@v1
+        with:
+          api-key: ${{ secrets.IONOS_API_KEY }}
+          project: ${{ secrets.IONOS_PROJECT_ID }}
+          service-host: api-eu.ionos.space
+          dist-folder: dist

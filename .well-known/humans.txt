@@ -1,0 +1,101 @@
+# humanstxt.org
+# The humans responsible for building this community manufacturing platform
+
+/* TEAM */
+
+Project Lead: Hyperpolymath
+Role: Vision, Architecture, Community Governance
+Location: United Kingdom
+GitHub: @Hyperpolymath
+
+AI Assistant: Claude (Anthropic)
+Role: Rapid Prototyping, Documentation, RSR Compliance
+Model: Claude Sonnet 4.5
+Session: 2025-11-22
+
+/* THANKS */
+
+Inspired by:
+  - Nicholas Kaldor (Economist, Kaldor's Laws)
+  - Douglas Engelbart (Augmentation, NLS)
+  - Ada Lovelace (First programmer, poetical science)
+  - Elinor Ostrom (Commons governance)
+  - Stafford Beer (Viable System Model)
+
+Technical Foundations:
+  - Deno Team (Modern JavaScript runtime)
+  - Rust Community (Memory-safe systems programming)
+  - ReScript Team (Sound type system for UI)
+  - Matter Protocol (CSA, open IoT standard)
+  - RISC-V Foundation (Open ISA)
+  - TimescaleDB (Time-series database)
+  - Automerge (CRDTs for offline-first)
+
+Community Inspiration:
+  - Open Source Ecology (Global Village Construction Set)
+  - Fab Labs / Maker Movement
+  - Transition Towns
+  - Platform Cooperatives
+  - Community Land Trusts
+
+/* SITE */
+
+Last update: 2025-11-22
+Language: English / ReScript / Rust / Deno
+Doctype: HTML5, Markdown, TOML
+IDE: Claude Code, VS Code, Vim
+Components: Deno 1.40+, ReScript 11+, Rust 1.75+
+Frameworks: Fresh (Deno), ReScript React
+Standards: RSR Framework Gold, RFC 9116, WCAG 2.1 AA, Matter 1.2
+
+/* PROJECT VALUES */
+
+1. Offline-First: Works without internet, respects autonomy
+2. Community Ownership: TPCF graduated trust model
+3. Hyperlocal: Spare room → supply chain
+4. Type Safety: ReScript + Rust + Deno strict
+5. Memory Safety: Zero unsafe blocks
+6. Reproducible: Nix flake, deterministic builds
+7. Accessible: WCAG 2.1 AA, screen reader tested
+8. Sustainable: Repair-friendly, long-term support
+9. Transparent: Open economics, visible costs
+10. Federated: P2P mesh, not client-server
+
+/* LICENSING */
+
+Software: Palimpsest License v0.8 (MIT + Apache-2.0 compatible)
+Documentation: CC-BY-SA-4.0
+Hardware: CERN-OHL-S-2.0 (strongly reciprocal)
+Patterns: CC-BY-SA-4.0
+
+All contributions remain community-owned.
+No contributor assignment required.
+Graduated perimeter system (TPCF).
+
+/* KALDOR'S LAW 2 */
+
+"The rate of growth in productivity is positively related
+to the rate of growth of manufacturing output."
+
+By decentralizing manufacturing to spare rooms, we create
+increasing returns to scale at the COMMUNITY level, not
+the corporate level.
+
+/* CONTACT */
+
+Website: https://kaldor.community
+Email: hello@kaldor.community
+GitHub: https://github.com/Hyperpolymath/Kaldor-IIoT
+Matrix: #kaldor:matrix.org
+Fediverse: @kaldor@fosstodon.org
+
+/* BUILD INFO */
+
+This file was human-written with AI assistance.
+Every line reviewed and approved by human maintainers.
+We believe in human-AI collaboration, not replacement.
+
+Build date: 2025-11-22
+Git commit: TBD
+RSR Level: Gold (target)
+TPCF Perimeter: 3 (Community Sandbox)

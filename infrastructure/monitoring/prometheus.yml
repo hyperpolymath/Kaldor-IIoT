@@ -1,0 +1,54 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    cluster: 'kaldor-iiot'
+    environment: 'production'
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+            - 'alertmanager:9093'
+
+# Load rules once and periodically evaluate them
+rule_files:
+  - '/etc/prometheus/rules/*.yml'
+
+# Scrape configurations
+scrape_configs:
+  # Prometheus itself
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # API Server
+  - job_name: 'api'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['api:3000']
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'kaldor-api'
+
+  # TimescaleDB
+  - job_name: 'timescaledb'
+    static_configs:
+      - targets: ['timescaledb:9187']
+
+  # Redis
+  - job_name: 'redis'
+    static_configs:
+      - targets: ['redis:9121']
+
+  # MQTT Broker
+  - job_name: 'mosquitto'
+    static_configs:
+      - targets: ['mosquitto:9234']
+
+  # Node Exporter (system metrics)
+  - job_name: 'node'
+    static_configs:
+      - targets: ['node-exporter:9100']

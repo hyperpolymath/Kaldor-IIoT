@@ -1,0 +1,37 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
+# SPDX-FileCopyrightText: 2025 Kaldor Community Manufacturing Platform Contributors
+
+# Kaldor IIoT Funding Channels
+#
+# This project follows solidarity economics principles:
+# - Community ownership over venture capital
+# - Contributor stipends over executive salaries
+# - Transparent allocation via quadratic voting
+#
+# All funds managed via OpenCollective for full transparency.
+
+# Primary funding channel (preferred)
+open_collective: kaldor-iiot
+
+# Individual donations
+liberapay: kaldor-community
+github: [Hyperpolymath]
+
+# Community support
+patreon: kaldor_manufacturing
+
+# For grants and institutional funding, contact:
+# funding@kaldor.community
+#
+# We accept:
+# - Foundation grants (Mozilla, Shuttleworth, etc.)
+# - Government innovation programs
+# - Cooperative membership fees
+# - Service contracts (support, training, consulting)
+#
+# We do NOT accept:
+# - Venture capital with equity stakes
+# - Corporate ownership
+# - Funding with restrictive IP requirements
+#
+# See GOVERNANCE.adoc for financial transparency and allocation process.
