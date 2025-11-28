@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
+// SPDX-FileCopyrightText: 2025 Kaldor Community Manufacturing Platform Contributors
+
 /**
  * Kaldor Community Manufacturing Platform
  * Deno Backend Server
@@ -6,7 +9,7 @@
  * Supporting Kaldor's Law 2: Productivity growth through manufacturing scale
  *
  * @version 2.0.0
- * @license AGPL-3.0
+ * @license MIT OR Apache-2.0 (Palimpsest v0.8)
  */
 
 import { Application, Router } from 'oak'
@@ -158,7 +161,7 @@ app.addEventListener('listen', ({ hostname, port, secure }) => {
 ║                                                           ║
 ║  Backend: Deno ${Deno.version.deno}                      ║
 ║  Runtime: WASM-accelerated, RISC-V ready                 ║
-║  License: AGPL-3.0                                        ║
+║  License: MIT OR Apache-2.0 (Palimpsest v0.8)            ║
 ╚═══════════════════════════════════════════════════════════╝
 
 Server running at: ${protocol}://${hostname}:${port}

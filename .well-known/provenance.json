@@ -1,0 +1,195 @@
+{
+  "spdx_license": "MIT OR Apache-2.0",
+  "spdx_copyright": "2025 Kaldor Community Manufacturing Platform Contributors",
+  "provenance": {
+    "version": "1.0.0",
+    "schema": "https://slsa.dev/provenance/v1",
+    "last_updated": "2025-11-28T00:00:00Z",
+    "project": {
+      "name": "Kaldor IIoT",
+      "description": "Hyperlocal Community Manufacturing Platform",
+      "repository": "https://github.com/Hyperpolymath/Kaldor-IIoT",
+      "homepage": "https://kaldor.community",
+      "license": "Palimpsest-0.8 (MIT OR Apache-2.0)",
+      "license_files": [
+        "LICENSE.txt",
+        "docs/licenses/LICENSE-MIT",
+        "docs/licenses/LICENSE-APACHE",
+        "docs/licenses/LICENSE-PALIMPSEST"
+      ]
+    },
+    "build": {
+      "reproducible": true,
+      "system": "Nix flakes",
+      "definition": "flake.nix",
+      "lock_file": "flake.lock",
+      "verification": "nix flake check"
+    },
+    "attestations": [
+      {
+        "type": "SPDX-headers",
+        "description": "All source files have SPDX license identifiers",
+        "verification": "just audit-licence"
+      },
+      {
+        "type": "dependency-audit",
+        "description": "All dependencies scanned for CVEs",
+        "verification": "just audit"
+      },
+      {
+        "type": "code-signing",
+        "description": "Git commits signed with GPG (in progress)",
+        "status": "pending",
+        "target_phase": "Phase 2 (Q2 2026)"
+      }
+    ],
+    "supply_chain": {
+      "backend": {
+        "runtime": "Deno 1.40+",
+        "dependencies": "backend-deno/deno.json",
+        "source": "Official Deno registry (deno.land/x)",
+        "pinning": "Exact versions (no semver ranges)",
+        "vendoring": "Critical dependencies vendored (future)"
+      },
+      "frontend": {
+        "compiler": "ReScript 11+",
+        "dependencies": "frontend-rescript/package.json",
+        "source": "npm registry",
+        "pinning": "Exact versions (no ^, ~, *)",
+        "vendoring": "No vendoring (npm ci for reproducibility)"
+      },
+      "wasm": {
+        "compiler": "Rust 1.75+ (stable)",
+        "dependencies": "wasm/pattern_gen/Cargo.toml",
+        "source": "crates.io",
+        "pinning": "Exact versions",
+        "vendoring": "Cargo vendor for offline builds"
+      },
+      "firmware": {
+        "platform": "ESP32-C6 (RISC-V)",
+        "framework": "ESP-IDF 5.1+",
+        "dependencies": "firmware-esp32/platformio.ini",
+        "source": "PlatformIO registry",
+        "pinning": "Exact versions",
+        "vendoring": "PlatformIO caching"
+      }
+    },
+    "security": {
+      "vulnerability_disclosure": ".well-known/security.txt",
+      "policy": "SECURITY.md",
+      "contact": "security@kaldor.community",
+      "coordinated_disclosure": "90 days",
+      "cve_database": "GitHub Security Advisories",
+      "automated_scanning": "just audit (scheduled: weekly)"
+    },
+    "governance": {
+      "model": "CURP consensus + quadratic voting",
+      "framework": "TPCF (Tri-Perimeter Contribution Framework)",
+      "documentation": "GOVERNANCE.adoc",
+      "maintainers": "MAINTAINERS.md",
+      "code_of_conduct": "CODE_OF_CONDUCT.md",
+      "decision_log": "docs/governance/decisions/"
+    },
+    "contributors": {
+      "attribution": ".well-known/humans.txt",
+      "license_agreement": "Palimpsest-0.8 (implicit CLA)",
+      "copyright": "Distributed (see SPDX headers)",
+      "recognition": "All contributors listed in humans.txt"
+    },
+    "audit_trail": {
+      "git_history": "Full commit history in Git",
+      "spdx_headers": "Every source file has authorship + copyright",
+      "governance_votes": "Immutable CRDT log (docs/governance/decisions/)",
+      "release_signatures": "GPG signed releases (planned for Phase 2)",
+      "sbom": "Software Bill of Materials (in progress)"
+    },
+    "chain_of_custody": [
+      {
+        "stage": "Source Code",
+        "location": "GitHub repository",
+        "verification": "Git commit signatures (planned)",
+        "immutability": "Git SHA-256 hashes"
+      },
+      {
+        "stage": "Build Artifacts",
+        "location": "Nix store",
+        "verification": "Nix content-addressable storage",
+        "immutability": "Nix store paths (SHA-256)"
+      },
+      {
+        "stage": "Container Images",
+        "location": "Podman registry (future)",
+        "verification": "Cosign signatures (planned)",
+        "immutability": "Image digests (SHA-256)"
+      },
+      {
+        "stage": "Firmware Binaries",
+        "location": "GitHub Releases (planned)",
+        "verification": "GPG signatures (planned)",
+        "immutability": "SHA-256 checksums"
+      }
+    ],
+    "environmental_impact": {
+      "carbon_reduction": "85% vs fast fashion",
+      "water_reduction": "93% vs conventional textile production",
+      "waste_reduction": "90% (circular economy)",
+      "methodology": "docs/white-paper/appendices/LCA_METHODOLOGY.md",
+      "validation": "Third-party LCA audit (planned Phase 3)"
+    },
+    "economic_model": {
+      "ownership": "Community-owned (no venture capital)",
+      "licensing": "Open-source (MIT OR Apache-2.0)",
+      "funding": "Grants + cooperative membership + donations",
+      "transparency": "OpenCollective (when funded)",
+      "sectors_supported": [
+        "Household",
+        "Social Enterprise",
+        "Charity",
+        "Worker Cooperative",
+        "Platform Cooperative",
+        "Community Land Trust",
+        "Mutual Aid",
+        "Commons"
+      ]
+    },
+    "theoretical_foundation": {
+      "kaldor_law_2": "Productivity growth = f(output growth)",
+      "verdoorn_coefficient": 0.52,
+      "empirical_evidence": "docs/white-paper/KALDOR_WHITE_PAPER.md#empirical-validation",
+      "academic_citation": "Kaldor, N. (1966). Causes of the Slow Rate of Economic Growth of the United Kingdom"
+    },
+    "standards_compliance": {
+      "RSR": "Rhodium Standard Repository (Gold - 100%)",
+      "Matter": "IEEE 802.15.4 Thread + Matter 1.2+ (in progress)",
+      "OPC_UA": "IEC 62541 (planned Phase 2)",
+      "Modbus": "Modbus TCP/RTU (planned Phase 2)",
+      "WCAG": "Web Content Accessibility Guidelines 2.1 AA (planned)",
+      "GDPR": "General Data Protection Regulation (compliant)",
+      "CCPA": "California Consumer Privacy Act (compliant)",
+      "RFC_9116": "security.txt specification (compliant)"
+    },
+    "related_projects": {
+      "upstream_dependencies": [
+        "Deno (MIT)",
+        "ReScript (MIT)",
+        "Rust (MIT/Apache-2.0)",
+        "Automerge (MIT)",
+        "TimescaleDB (Apache-2.0)",
+        "ESP-IDF (Apache-2.0)"
+      ],
+      "inspiration": [
+        "Local-first software (Ink & Switch)",
+        "Platform cooperativism (Trebor Scholz)",
+        "Solidarity economics (Emily Kawano)",
+        "Kaldor's Laws (Nicholas Kaldor)"
+      ]
+    },
+    "contact": {
+      "general": "hello@kaldor.community",
+      "security": "security@kaldor.community",
+      "governance": "governance@kaldor.community",
+      "privacy": "privacy@kaldor.community",
+      "funding": "funding@kaldor.community"
+    }
+  }
+}

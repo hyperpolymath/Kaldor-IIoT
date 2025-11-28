@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
+// SPDX-FileCopyrightText: 2025 Kaldor Community Manufacturing Platform Contributors
 {
   "tasks": {
     "dev": "deno run --allow-net --allow-read --allow-write --allow-env --watch main.ts",

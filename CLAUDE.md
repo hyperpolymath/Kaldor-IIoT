@@ -1,3 +1,6 @@
+<!-- SPDX-License-Identifier: MIT OR Apache-2.0 -->
+<!-- SPDX-FileCopyrightText: 2025 Kaldor Community Manufacturing Platform Contributors -->
+
 # CLAUDE.md
 
 This file provides guidance for working with Claude Code on the Kaldor IIoT project.

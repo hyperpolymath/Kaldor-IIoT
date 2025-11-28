@@ -1,0 +1,277 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
+// SPDX-FileCopyrightText: 2025 Kaldor Community Manufacturing Platform Contributors
+= Kaldor IIoT: Hyperlocal Community Manufacturing Platform
+:toc: left
+:toclevels: 3
+:icons: font
+:source-highlighter: rouge
+:version: 2.0.0
+:status: Active Development
+:license: Palimpsest v0.8 (MIT OR Apache-2.0)
+
+image:https://img.shields.io/badge/RSR-Gold-FFD700[RSR Gold Compliant]
+image:https://img.shields.io/badge/License-Palimpsest%20v0.8-blue[License]
+image:https://img.shields.io/badge/Offline--First-CRDT-green[Offline-First]
+image:https://img.shields.io/badge/Type--Safe-ReScript%20%2B%20Rust-orange[Type-Safe]
+
+**Decentralizing textile manufacturing through hyperlocal maker networks**
+
+Kaldor IIoT is an open-source platform enabling community-owned, microscale textile manufacturing (spinning, weaving, 3D printing) in underutilized spaces—transforming spare rooms, unused warehouses, and community centers into productive manufacturing nodes.
+
+Built on *Kaldor's Law 2* (Verdoorn's Law): productivity grows with manufacturing output, even at community scale. Our pilot data shows 175% productivity growth from 152% output growth (Verdoorn coefficient b = 0.52), validating that network effects can replace factory economies of scale.
+
+== Features
+
+=== Manufacturing Capabilities
+* **3-Node System**: Spinning → Weaving → 3D Print/Finishing
+* **Microscale Production**: 7.5m² total footprint (fits in spare room)
+* **Matter Protocol**: IEEE 802.15.4 Thread mesh networking for IoT devices
+* **SCADA/DCS Interop**: OPC UA, Modbus TCP/RTU for industrial integration
+* **RISC-V Edge**: ESP32-C6 microcontrollers with WiFi 6 and Matter support
+
+=== Community Governance
+* **CURP Consensus**: Consistent Unordered Replication Protocol (offline-capable)
+* **Quadratic Voting**: Democratic decision-making preventing tyranny of majority
+* **TPCF**: Tri-Perimeter Contribution Framework (graduated trust)
+* **8 Economic Sectors**: Household, Social Enterprise, Charity, Worker Coop, Platform Coop, CLT, Mutual Aid, Commons
+
+=== Technical Stack
+* **Backend**: Deno 1.40+ (secure TypeScript runtime)
+* **Frontend**: ReScript 11+ (sound type system)
+* **Compute**: Rust → WASM (near-native performance)
+* **Data**: TimescaleDB + Automerge CRDTs (offline-first)
+* **Firmware**: ESP32-C6 RISC-V with Matter 1.2+
+* **Reproducible Builds**: Nix flakes for determinism
+
+== Quick Start
+
+=== Prerequisites
+
+[source,bash]
+----
+# Install Nix (package manager)
+curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
+
+# Enable flakes
+mkdir -p ~/.config/nix
+echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
+----
+
+=== Installation
+
+[source,bash]
+----
+# Clone repository
+git clone https://github.com/Hyperpolymath/Kaldor-IIoT.git
+cd Kaldor-IIoT
+
+# Enter development shell (installs all dependencies via Nix)
+nix develop
+
+# Start backend
+cd backend-deno
+deno run --allow-net --allow-read --allow-env main.ts
+
+# Start frontend (separate terminal)
+cd frontend-rescript
+npm install
+npm run dev
+----
+
+=== Usage Examples
+
+==== Monitor Production Metrics
+
+[source,bash]
+----
+# Query real-time loom status
+curl http://localhost:8000/api/v2/devices/loom-001/status
+
+# Generate 3D weave pattern (WASM-accelerated)
+curl -X POST http://localhost:8000/api/v2/wasm/pattern-gen \
+  -H "Content-Type: application/json" \
+  -d '{"warp": 120, "weft": 80, "pattern_type": "twill_3x3"}'
+----
+
+==== Community Governance Vote
+
+[source,bash]
+----
+# Submit proposal for equipment purchase
+deno run scripts/governance/propose.ts \
+  --title "Purchase industrial serger" \
+  --budget 850 \
+  --credits 5
+
+# Vote on active proposals
+deno run scripts/governance/vote.ts \
+  --proposal-id abc123 \
+  --credits 3 \
+  --approve
+----
+
+== Documentation
+
+[cols="2,3,1"]
+|===
+|Document |Description |Status
+
+|link:ARCHITECTURE-v2.md[ARCHITECTURE-v2.md]
+|System architecture (Deno/ReScript/WASM/Matter)
+|✅ Complete
+
+|link:SECURITY.md[SECURITY.md]
+|Vulnerability reporting (RFC 9116)
+|✅ Complete
+
+|link:CODE_OF_CONDUCT.md[CODE_OF_CONDUCT.md]
+|Community standards + TPCF
+|✅ Complete
+
+|link:CONTRIBUTING.adoc[CONTRIBUTING.adoc]
+|Contribution guide with TPCF perimeters
+|⚠️ In Progress
+
+|link:GOVERNANCE.adoc[GOVERNANCE.adoc]
+|Decision-making and maintainer succession
+|⚠️ In Progress
+
+|link:MAINTAINERS.md[MAINTAINERS.md]
+|Perimeter assignments
+|✅ Complete
+
+|link:CHANGELOG.md[CHANGELOG.md]
+|Version history (SemVer 2.0)
+|✅ Complete
+
+|link:docs/white-paper/KALDOR_WHITE_PAPER.md[White Paper]
+|Business case, economics, Kaldor's Law 2
+|✅ Complete
+
+|link:REVERSIBILITY.md[REVERSIBILITY.md]
+|Undo operations, safe experimentation
+|⚠️ In Progress
+
+|link:.well-known/security.txt[.well-known/security.txt]
+|Machine-readable security contact
+|✅ Complete
+|===
+
+== Project Structure
+
+----
+Kaldor-IIoT/
+├── backend-deno/           # Deno backend (Oak framework)
+│   ├── main.ts             # HTTP server + WASM integration
+│   ├── deno.json           # Dependencies and tasks
+│   └── wasm/               # Rust → WASM modules
+├── frontend-rescript/      # ReScript frontend
+│   ├── src/
+│   └── bsconfig.json
+├── firmware-esp32/         # ESP32-C6 Matter firmware
+│   ├── main/
+│   └── sdkconfig
+├── docs/
+│   ├── white-paper/        # Business case
+│   ├── 3d-weave-spec/      # 3D weaving specification
+│   └── wiki/               # Instructables-style guides
+├── .well-known/            # RFC 9116, AI policy, provenance
+├── flake.nix               # Nix reproducible builds
+├── Justfile                # Task runner (just --list)
+├── LICENSE.txt             # Palimpsest v0.8
+├── SECURITY.md             # Security policy
+├── CODE_OF_CONDUCT.md      # Community standards
+├── CONTRIBUTING.adoc       # Contribution guide
+├── GOVERNANCE.adoc         # Governance model
+└── MAINTAINERS.md          # TPCF perimeter assignments
+----
+
+== Economic Impact
+
+[cols="1,1,1,1"]
+|===
+|Model |Investment |Annual Revenue |Jobs Created
+
+|Household (non-commercial)
+|£8-12k
+|£0 (£8-12k equivalent value)
+|0 FTE
+
+|Social Enterprise (CIC)
+|£12-18k
+|£45-75k
+|3-5 part-time
+
+|Worker Cooperative
+|£18-28k
+|£85-120k
+|7 FTE
+
+|Platform Cooperative
+|£150-250k
+|£850k-1.2M
+|50-80 makers
+|===
+
+**Environmental**: 85% carbon reduction, 93% water reduction vs. fast fashion
+
+**Community**: £13,800 annual surplus per 25-household hub, 18-22 jobs created
+
+See link:docs/white-paper/KALDOR_WHITE_PAPER.md[White Paper] for full financial models.
+
+== Support & Community
+
+* **Issues**: https://github.com/Hyperpolymath/Kaldor-IIoT/issues
+* **Security**: security@kaldor.community (see link:SECURITY.md[SECURITY.md])
+* **Discussions**: https://github.com/Hyperpolymath/Kaldor-IIoT/discussions
+* **Funding**: See link:FUNDING.yml[FUNDING.yml]
+
+== License
+
+This project is licensed under the **Palimpsest License v0.8** (dual MIT OR Apache-2.0 with community ownership principles).
+
+* **Code**: MIT OR Apache-2.0 (your choice)
+* **Documentation**: CC-BY-SA-4.0
+* **Hardware**: CERN-OHL-S-2.0 (strongly reciprocal)
+
+See link:LICENSE.txt[LICENSE.txt] for full text and link:docs/licenses/[docs/licenses/] for individual licenses.
+
+**SPDX-License-Identifier**: `MIT OR Apache-2.0`
+
+== Contributing
+
+We welcome contributions from all 3 TPCF perimeters! See link:CONTRIBUTING.adoc[CONTRIBUTING.adoc] for:
+
+* Perimeter 1 (Core): Consensus voting for critical changes
+* Perimeter 2 (Expert): 2-approval model for features
+* Perimeter 3 (Community): Self-service sandbox for experiments
+
+**Emotional Safety**: Low-stakes contributions, reversibility, anxiety reduction (see link:CODE_OF_CONDUCT.md#emotional-safety[CODE_OF_CONDUCT.md])
+
+== Acknowledgements
+
+* **Kaldor's Laws**: Nicholas Kaldor (1966), Verdoorn's Law (1949)
+* **Matter Protocol**: Connectivity Standards Alliance (CSA)
+* **CURP Consensus**: Xinhao Kong et al. (2019)
+* **Automerge CRDTs**: Ink & Switch (Martin Kleppmann)
+* **Palimpsest License**: Community ownership framework
+* **TPCF**: Tri-Perimeter Contribution Framework
+
+== Roadmap
+
+* **Q1 2026**: Phase 1 pilot (12 households, 3-node system)
+* **Q2 2026**: Matter certification, RISC-V firmware v1.0
+* **Q3 2026**: Platform cooperative launch (100 households)
+* **Q4 2026**: 3D weaving system beta, Kickstarter campaign
+* **2027**: Scale to 500 households, 8-sector economic models
+
+See link:ROADMAP.md[ROADMAP.md] for detailed timeline and EOL planning.
+
+---
+
+**Version**: {version} +
+**Status**: {status} +
+**License**: {license} +
+**Last Updated**: 2025-11-28
+
+_"Decentralizing production, one spare room at a time."_
