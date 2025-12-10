@@ -1,0 +1,36 @@
+= Kaldor-IIoT - Citation Guide
+:toc:
+
+== BibTeX
+
+[source,bibtex]
+----
+@software{kaldor-iiot_2025,
+  author = {Polymath, Hyper},
+  title = {Kaldor-IIoT},
+  year = {2025},
+  url = {https://github.com/hyperpolymath/Kaldor-IIoT},
+  license = {AGPL-3.0-or-later}
+}
+----
+
+== Harvard Style
+
+Polymath, H. (2025) _Kaldor-IIoT_ [Computer software]. Available at: https://github.com/hyperpolymath/Kaldor-IIoT
+
+== OSCOLA
+
+Hyper Polymath, 'Kaldor-IIoT' (2025) <https://github.com/hyperpolymath/Kaldor-IIoT>
+
+== MLA
+
+Polymath, Hyper. "Kaldor-IIoT." 2025, github.com/hyperpolymath/Kaldor-IIoT.
+
+== APA 7
+
+Polymath, H. (2025). _Kaldor-IIoT_ [Computer software]. GitHub. https://github.com/hyperpolymath/Kaldor-IIoT
+
+== See Also
+
+* link:../CITATION.cff[CITATION.cff]
+* link:../codemeta.json[codemeta.json]
