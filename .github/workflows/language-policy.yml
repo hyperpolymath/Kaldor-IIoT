@@ -1,0 +1,44 @@
+name: Language Policy Enforcement
+on: [push, pull_request]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Enforce language policies
+        run: |
+          # Block new Python files (except SaltStack)
+          NEW_PY=$(git diff --name-only --diff-filter=A HEAD~1 2>/dev/null | grep -E '\.py$' | grep -v 'salt' || true)
+          if [ -n "$NEW_PY" ]; then
+            echo "❌ New Python files detected. Use Rust or ReScript instead."
+            echo "$NEW_PY"
+            exit 1
+          fi
+          
+          # Block new Ruby files
+          NEW_RB=$(git diff --name-only --diff-filter=A HEAD~1 2>/dev/null | grep -E '\.rb$' || true)
+          if [ -n "$NEW_RB" ]; then
+            echo "❌ New Ruby files detected. Use Rust, Ada/SPARK, or Crystal instead."
+            echo "$NEW_RB"
+            exit 1
+          fi
+          
+          # Block new Perl files
+          NEW_PL=$(git diff --name-only --diff-filter=A HEAD~1 2>/dev/null | grep -E '\.(pl|pm)$' || true)
+          if [ -n "$NEW_PL" ]; then
+            echo "❌ New Perl files detected. Use Rust instead."
+            echo "$NEW_PL"
+            exit 1
+          fi
+          
+          # Block new Java/Kotlin (except in LSP projects)
+          if [[ ! "$GITHUB_REPOSITORY" =~ "language-server" ]]; then
+            NEW_JAVA=$(git diff --name-only --diff-filter=A HEAD~1 2>/dev/null | grep -E '\.(java|kt)$' || true)
+            if [ -n "$NEW_JAVA" ]; then
+              echo "❌ New Java/Kotlin files detected. Use Rust instead."
+              echo "$NEW_JAVA"
+              exit 1
+            fi
+          fi
+          
+          echo "✅ Language policy check passed"
